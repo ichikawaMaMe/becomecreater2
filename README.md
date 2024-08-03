@@ -1,4 +1,5 @@
 # <!--become-creater-->
+https://docs.google.com/spreadsheets/d/1KGE2IYdh-Az8WaXXZ8lLYaAE0SHMdtrt8TqrlVK_ORI/edit?gid=1898975908#gid=1898975908
 ## サイト概要
 ### サイトテーマ
 クリエイターが技術向上のために情報共有するサイト
