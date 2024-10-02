@@ -1,0 +1,19 @@
+<h1 id="room"><%= @user.name %> </h1>
+<div class="message" style="width: 400px;">
+  <% @dms.each do |dm| %>
+  <% if dm.user_id == current_user.id %>
+   <p style="text-align: right;"><%= dm.message %></p>
+  <% else %>
+   <p style="text-align: left;"><%= dm.message %></p>
+  <% end %>
+<% end %>
+</div>
+
+<div class="errors">
+  <%= render "layouts/errors", obj: @dm %>
+</div>
+
+<%= form_with model: @dm, data: {remote: true} do |f| %>
+ <%= f.text_field :message %>
+ <%= f.hidden_field :dmroom_id %>
+<% end %>

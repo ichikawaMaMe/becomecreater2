@@ -5,12 +5,50 @@
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
-
-    <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <script src="https://kit.fontawesome.com/2e9004fd8e.js" crossorigin="anonymous"></script>
+    <%= stylesheet_pack_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
     <%= javascript_pack_tag 'application', 'data-turbolinks-track': 'reload' %>
   </head>
 
   <body>
+
+  <header>
+    <% if user_signed_in? %>
+      <li>
+        <%= link_to "my page", "user/mypage/(current_user_id)" %>
+      </li>
+      <li>
+        <%= link_to "ログアウト", destroy_user_session_path, method: :delete %>
+      </li>
+    <% else %>
+      <li>
+        <%= link_to "新規登録", new_user_registration_path %>
+                            </li>
+                            <li>
+        <%= link_to "ログイン", new_user_session_path %>
+      </li>
+    <% end %>
+  </header>
+
+    #検索欄
+    <%= form_with url: search_path, method: :get, local: true do |f| %>
+    <%= f.text_field :content %>
+    <%= f.select :model, options_for_select({"ユーザー" => "user", "イラスト" => "post", "タグ" => "tag"}) %>
+    <%= f.select :method, options_for_select({"完全一致" => "perfect", "部分一致" => "partial"}) %>
+    <%= f.submit "検索" %>
+    <% end %>
+
+    <p class="notice"><%= notice %></p>
+    <p class="alert"><%= alert %></p>
+
+    #DMリンク
+    <% if current_user != user && current_user.following?(user) && user.following?(current_user) %>
+     <%= link_to 'DM', dm_path(user.id), class: "ml-3" %>
+    <% end %>
+
+
     <%= yield %>
+
+
   </body>
 </html>

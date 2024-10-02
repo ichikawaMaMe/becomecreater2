@@ -1,0 +1,7 @@
+<%= form_with(model:[post,post_comment]) do |f| %>
+<div id="post_comments-error">
+  <%= render 'layouts/error_messages', model: f.object %>
+</div>
+<%= f.text_area :post_comment,rows:'5' %>
+<%= f.submit "送信する" %>
+<% end %>

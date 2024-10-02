@@ -1,0 +1,10 @@
+<% if @model == 'user' %>
+ <%= @content %>
+ <%= render 'users/index', users: @records %>
+<% elsif @model == 'post' %>
+ <%= @content %>
+ <%= render 'posts/index', posts: @records %>
+<% elsif @model == 'tag' %>
+ <%= @content %>
+ <%= render 'tags/index', posts: @records %>
+<% end %>

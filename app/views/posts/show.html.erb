@@ -1,0 +1,43 @@
+
+<%= post_image_tag @post, :image, fill, 200, 200 %>
+<%= @post.title %>
+<%= @post.user.name %>
+<%= @post.created_at.strftime('%Y/%m/%d') %>
+<% if @post.user == current_user %>
+<%= link_to "削除", post_path(@post), method: :delete %>
+<% end %>
+
+
+
+ブックマークのonoff用の記述
+
+<td id="bookmark_btn_<%= post.id %>">
+  <%= render "posts/bookmark", post: post %>
+</td>
+
+コメント表示用の記述
+コメント件数:<%= @post.post_comment.count %>
+<% @post_image.post_comments.each do |post_comment| %>
+コメントユーザーのアイコン<%= image_tag post_comment.user.get_profile_image(100,100) %>
+コメントユーザー名<%= post_comment.user.name %>
+<%= post_comment.created_at.strftime('%Y/%m/%d') %><%= post_comment.comment %>
+
+<% end %>
+<% end %>
+
+閲覧数用の記述
+<td>閲覧数:<%= @post.access.count %></td>
+
+投稿削除
+<td><%= link_to 'Destroy', post_path, method: :delete, deta: { confirm: '削除しますか' }, class* "btn btn-sm btn-danger"%></td>
+
+コメント削除
+<% if post_comment.user == current_user %>
+<%= link_to "削除", post_post_comment_path(post_comment.post, post_comment), method: :delete %>
+<% end %>
+
+コメント投稿用の記述
+<%= form_with model: [@post_image, @post_comment] do |f| %>
+<%= f.text_area :comment, rows:'4', placeholder: "コメント" %>
+<%= f.submit "送信" %>
+<% end %>

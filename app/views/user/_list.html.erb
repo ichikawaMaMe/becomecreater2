@@ -1,0 +1,6 @@
+<% posts.each do |post| %>
+ <%= link_to post_path(post.id) do %>
+ <%= image_tag post, :image, :fill, 200, 200 %>
+ <% end %>
+ <%= link_to "#{post.comments.count} コメント", post_path(post.id) %>
+<% end %>

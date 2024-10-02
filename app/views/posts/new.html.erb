@@ -1,0 +1,24 @@
+<%= form_with model: @post do |f| %>
+
+イラスト投稿領域
+<%= f.file_field :image, accept: "image/*","png/*","/jpeg/*" %>
+<br>
+作品タイトル
+<%= f.text_field :title %>
+<br>
+キャプション
+<%= f.text_field :caption %>
+<br>
+公式タグ選択
+<br>
+オリジナルタグ
+<br>
+予約投稿チェックボックス
+<br>
+公開範囲選択
+<br>
+仮保存
+<br>
+投稿
+<%= f.submit '投稿' %>
+<% end %>

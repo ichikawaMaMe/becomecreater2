@@ -1,0 +1,16 @@
+<p>お知らせ
+</p>
+
+<p>フォロー新着
+</p>
+
+<p>おすすめ
+</p>
+<%= if @post.already_bookmaeked?(current_user) %>
+<p>bookmark</p>
+<link_to bookmarks_path(@post),method: :delete,class: "bookmark" do
+icon("fas", "star", class: "bookmark-icon")
+<%= else %>
+<p>bookmark</p>
+<link_to bookmarks_path(@post),method: :post,class: "bookmark" do
+icon("fas", "star", class: "bookmark-icon")

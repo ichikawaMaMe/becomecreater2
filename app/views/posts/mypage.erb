@@ -1,0 +1,36 @@
+
+
+プロフィール
+アイコン
+ユーザー名
+フォロワー数
+フォロー数
+プロフィール文
+フォロー/on/off
+<% if logged_in? && current_user != user %>
+ <% if current_user.following?(user) %>
+  <%= button_to 'フォロー解除', relationgship_path(current_user.relationships.find_by(follower: user)), method: :delete, remote: true %>
+ <% else %>
+  <%= button_to 'フォロー',relationgships_path(follower: user), remote: true %>
+ <% end %>
+
+
+
+body
+<ul class="tab-list list-unstyled">
+  <li class="tab tab-active">
+    作品一覧
+  </li>
+  <li class="tab">
+    ブックマーク一覧
+  </li>
+</ul>
+
+<div class="tabbox">
+  <div class="tabbox box-show">
+    <%= render 'posts/tab', posts:@作品一覧 %>
+  </div>
+  <div class="tabbox">
+    <%= render 'posts/tab', posts:@ブックマーク一覧 %>
+  </div>
+</div>

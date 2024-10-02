@@ -1,0 +1,8 @@
+<% posts.each do |post| %>
+ <%= link_to post_path(post.id) do %>
+  <%= attachment_image_tag post, :image, :fill, 200, 200 %>
+ <% end %>
+ <p>説明:<%= post.content %></p>
+ <p>ユーザー名:<%= post.user.name %></p>
+ <p><link_to "#{post.comments.count} コメント",post_path(post.id) %></p>
+<% end %>

@@ -1,0 +1,30 @@
+index(HOME)
+<br>
+
+<div class="container">
+  <div class="row">
+    <div class="border col-3">
+      イラスト創作相談
+      <%= link_to "イラスト創作相談", '/'
+      <br>
+      ランキング
+      <%= link_to "ランキング", '/posts'
+      <br>
+      フォロー新着
+      <br>
+      フォロワー新着
+      <br>
+      全体新着
+      <br>
+      閲覧履歴
+    </div>
+    <div class="border col-9">
+      お知らせ
+      フォロー新着
+      ランキング
+      <% post_ranks.each.with_index(1) do |post, i| %>
+      第<%= i %>位
+      <% end %>
+    </div>
+  </div>
+</div>
