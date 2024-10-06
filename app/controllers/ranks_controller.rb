@@ -1,4 +1,5 @@
 class RanksController < ApplicationController
+  #投稿がない場合の例外処理を入れること
   def rank
     #ブックマークラング（月）
     @month_bookmark_ranks = Post.find(Bookmark.group(:post_id).where(created_at: Time.current.all_month).order('count(post_id) desc').pluck(:post_id))

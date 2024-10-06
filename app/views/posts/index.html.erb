@@ -5,10 +5,10 @@ index(HOME)
   <div class="row">
     <div class="border col-3">
       イラスト創作相談
-      <%= link_to "イラスト創作相談", '/'
+      <%= link_to "イラスト創作相談", '/' %>
       <br>
       ランキング
-      <%= link_to "ランキング", '/posts'
+      <%= link_to "ランキング", '/posts' %>
       <br>
       フォロー新着
       <br>
@@ -22,9 +22,9 @@ index(HOME)
       お知らせ
       フォロー新着
       ランキング
-      <% post_ranks.each.with_index(1) do |post, i| %>
-      第<%= i %>位
-      <% end %>
+      <=% @month_bookmark_rankspost_ranks.each.with_index(1) do |post, i| %>
+      第<%= 1%>位
+      <=% end %>
     </div>
   </div>
 </div>

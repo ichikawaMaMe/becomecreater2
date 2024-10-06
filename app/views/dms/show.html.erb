@@ -17,3 +17,9 @@
  <%= f.text_field :message %>
  <%= f.hidden_field :dmroom_id %>
 <% end %>
+
+
+    #DMリンクこのuserは相手userのこと
+    <% if current_user != user && current_user.following?(user) && user.following?(current_user) %>
+     <%= link_to 'DM', dm_path(user.id), class: "ml-3" %>
+    <% end %>

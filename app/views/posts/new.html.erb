@@ -1,7 +1,7 @@
 <%= form_with model: @post do |f| %>
 
 イラスト投稿領域
-<%= f.file_field :image, accept: "image/*","png/*","/jpeg/*" %>
+<%= f.file_field :image, accept: "image/png, image/jpeg" %>
 <br>
 作品タイトル
 <%= f.text_field :title %>

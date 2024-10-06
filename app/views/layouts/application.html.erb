@@ -15,7 +15,7 @@
   <header>
     <% if user_signed_in? %>
       <li>
-        <%= link_to "my page", "user/mypage/(current_user_id)" %>
+        <%= link_to "my page", user_path(current_user.id) %>
       </li>
       <li>
         <%= link_to "ログアウト", destroy_user_session_path, method: :delete %>
@@ -41,10 +41,7 @@
     <p class="notice"><%= notice %></p>
     <p class="alert"><%= alert %></p>
 
-    #DMリンク
-    <% if current_user != user && current_user.following?(user) && user.following?(current_user) %>
-     <%= link_to 'DM', dm_path(user.id), class: "ml-3" %>
-    <% end %>
+
 
 
     <%= yield %>

@@ -1,0 +1,61 @@
+プロフフィールヘッダー画像
+<%= image_tag @user.get_mypageheader_image(100,100) %>
+<br>
+アイコン画像
+  <%= image_tag @user.get_profile_image(100,100) %>
+<br>
+
+ユーザー名
+<%= @user.name %>
+<br>
+フォローボタン（カレントユーザーの場合はプロフィール編集ボタン）
+<%# @user.each do |user| %>
+ <%# if logged_in? $$ current_user != user %>
+ <%# if current_user.following?(@user) %>
+  <%= link_to 'フォロー解除', user_relationshoips_path(@user.id), method: :delete %>
+ <%# else %>
+  <%= link_to 'フォロー', user_relationshoips_path(@user.id),method: :post %>
+ <%# end %>
+
+<br>
+フォロワー数の表示（フォロワー一覧へのリンク）
+<%= link_to 'フォロワー一覧', user_followers_path(@user) %>
+
+フォロー数（フォロー一覧へのリンク）
+<%= link_to 'フォロー一覧', user_followings_path(@user) %>
+<br>
+プロフィール文
+<%#= @user.introduction %>
+
+固定イラスト（４つまで）
+
+作品一覧
+
+
+<% if @userselected_post.present? %>
+<% @userselected_post.each do |user_post| %>
+    <div>
+    <%= image_tag user_post.get_image %>
+    </div>
+<% end %>
+<% end %>
+
+<% if @user_post.present? %>
+<% @user_post.each do |user_post| %>
+    <div>
+    <%= image_tag user_post.get_image %>
+    </div>
+<% end %>
+<% end %>
+
+ブックマーク機能
+<% if @post.present? %>
+<div class="bookmarks_btns_<%= @post.id %>">
+ <%= render 'bookmarks/bookmark',post: @post %>
+</div>
+<% end %>
+
+コメント件数表示兼ポストへのリンク
+<% if @post.present? %>
+<%= link_to "#{@post.post_comments.count} コメント", post_path(@post.id) %>
+<% end %>
