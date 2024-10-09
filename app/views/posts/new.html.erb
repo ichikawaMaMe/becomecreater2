@@ -7,11 +7,12 @@
 <%= f.text_field :title %>
 <br>
 キャプション
-<%= f.text_field :caption %>
+<%= f.text_area :caption %>
 <br>
 公式タグ選択
 <br>
 オリジナルタグ
+<%= f.text_area :tag_ids,class: "form-control", id:'tag_ids', placehodler: "タグをつける。複数つける場合は','で区切ってください。" %>
 <br>
 予約投稿チェックボックス
 <br>

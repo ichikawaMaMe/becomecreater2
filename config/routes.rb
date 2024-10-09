@@ -8,6 +8,7 @@ Rails.application.routes.draw do
   resources :posts do
     resources :bookmarks, only: [:create, :destroy]
     resources :post_comments, only: [:create, :destroy]
+    get :tags, on: :collection
   end
 
   resources :posts, only: [:new, :create]

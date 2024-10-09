@@ -25,6 +25,13 @@ index(HOME)
       <=% @month_bookmark_rankspost_ranks.each.with_index(1) do |post, i| %>
       第<%= 1%>位
       <=% end %>
+      <% if @post.present? %>
+      <% @post.each do |post| %>
+       <%= post.title %>
+       <%= post.image %>
+       <br>
+      <% end %>
+      <% end %>
     </div>
   </div>
 </div>

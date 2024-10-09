@@ -25,6 +25,11 @@
 <% end %>
 <% end %>
 
+タグ表示
+<%= post.tags.each do |tag| %>
+<%= tag.name %>
+<% end %>
+
 閲覧数用の記述
 <td>閲覧数:<%= @post.access.count %></td>
 

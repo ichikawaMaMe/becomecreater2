@@ -1,0 +1,7 @@
+<% provide(:title, "タグ一覧") %>
+<div>
+  <h2>タグ一覧</h2>
+    <% @tags.each do |t| %>
+      <%= link_to t.name, posts_path(tag_id: t.id)%>
+    <% end %>
+</div>
