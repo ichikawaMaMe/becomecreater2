@@ -1,61 +1,114 @@
-プロフフィールヘッダー画像
-<%= image_tag @user.get_mypageheader_image(100,100) %>
-<br>
-アイコン画像
-  <%= image_tag @user.get_profile_image(100,100) %>
-<br>
 
-ユーザー名
-<%= @user.name %>
-<br>
-フォローボタン（カレントユーザーの場合はプロフィール編集ボタン）
-<%# @user.each do |user| %>
- <%# if logged_in? $$ current_user != user %>
- <%# if current_user.following?(@user) %>
-  <%= link_to 'フォロー解除', user_relationshoips_path(@user.id), method: :delete %>
- <%# else %>
-  <%= link_to 'フォロー', user_relationshoips_path(@user.id),method: :post %>
- <%# end %>
-
-<br>
-フォロワー数の表示（フォロワー一覧へのリンク）
-<%= link_to 'フォロワー一覧', user_followers_path(@user) %>
-
-フォロー数（フォロー一覧へのリンク）
-<%= link_to 'フォロー一覧', user_followings_path(@user) %>
-<br>
-プロフィール文
-<%#= @user.introduction %>
-
-固定イラスト（４つまで）
-
-作品一覧
-
-
-<% if @userselected_post.present? %>
-<% @userselected_post.each do |user_post| %>
-    <div>
-    <%= image_tag user_post.get_image %>
+<div class="container mt-5">
+  <!-- Header Section with Cover Image -->
+  <div class="profile-header position-relative" style="height: 250px;">
+    <%= image_tag @user.get_mypageheader_image(1000, 250), class: 'img-fluid w-100', alt: 'header image', style: 'height: 100%; object-fit: cover;' %>
+    <!-- Profile Picture and Username -->
+    <div class="profile-info position-absolute" style="bottom: -50px; left: 20px;">
+      <%= image_tag @user.get_profile_image(100, 100), class: 'rounded-circle border border-white', alt: 'profile image', style: 'width: 100px; height: 100px;' %>
+      <div class="ml-3">
+        <h3 class="text-white"><%= @user.name %></h3>
+        <p class="text-white-50"><%= @user.introduction %></p>
+      </div>
     </div>
-<% end %>
-<% end %>
-
-<% if @user_post.present? %>
-<% @user_post.each do |user_post| %>
-    <div>
-    <%= image_tag user_post.get_image %>
-    </div>
-<% end %>
-<% end %>
-
-ブックマーク機能
-<% if @post.present? %>
-<div class="bookmarks_btns_<%= @post.id %>">
- <%= render 'bookmarks/bookmark',post: @post %>
+  </div>
+  <div class="mt-3">
+  <p class="text-muted"><%= @user.introduction.present? ? truncate(@user.introduction, length: 200) : '自己紹介がありません。' %></p>
 </div>
-<% end %>
+  <!-- Action Buttons for Current User -->
+  <div class="d-flex justify-content-between align-items-center mt-5">
+    <% if current_user.present? && current_user != @user %>
+      <% if current_user.following?(@user) %>
+        <%= link_to 'フォロー解除', user_relationships_path(@user.id), method: :delete, class: 'btn btn-danger' %>
+      <% else %>
+        <%= link_to 'フォロー', user_relationships_path(@user.id), method: :post, class: 'btn btn-primary' %>
+      <% end %>
+    <% elsif @user == current_user %>
+      <%= link_to 'プロフィール編集', edit_user_path(@user), class: 'btn btn-primary' %>
+    <% end %>
 
-コメント件数表示兼ポストへのリンク
-<% if @post.present? %>
-<%= link_to "#{@post.post_comments.count} コメント", post_path(@post.id) %>
-<% end %>
+    <!-- Followers and Followings Links -->
+    <div>
+      <%= link_to 'フォロワー一覧', user_followers_path(@user), class: 'btn btn-outline-secondary mr-2' %>
+      <%= link_to 'フォロー一覧', user_followings_path(@user), class: 'btn btn-outline-secondary' %>
+    </div>
+  </div>
+  <!-- Tabs for Posts, Bookmarks, Following -->
+  <ul class="nav nav-tabs mt-5" id="tabs" role="tablist">
+    <li class="nav-item">
+      <a class="nav-link active" id="posts-tab" data-toggle="tab" href="#posts" role="tab" aria-controls="posts" aria-selected="true">投稿</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" id="bookmarks-tab" data-toggle="tab" href="#bookmarks" role="tab" aria-controls="bookmarks" aria-selected="false">ブックマーク</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" id="following-tab" data-toggle="tab" href="#following" role="tab" aria-controls="following" aria-selected="false">フォロー新着</a>
+    </li>
+  </ul>
+  <div class="tab-content mt-3" id="tabcontent">
+    <!-- Posts Tab -->
+    <div class="tab-pane fade show active" id="posts" role="tabpanel" aria-labelledby="posts-tab">
+      <div class="row">
+        <% @user.posts.each do |post| %>
+          <div class="col-md-4 mb-4">
+            <div class="card">
+              <%= image_tag post.get_post_image, class: 'card-img-top', alt: 'post image' %>
+              <div class="card-body">
+                <h5 class="card-title"><%= post.title %></h5>
+                <%= link_to 'VIEW POST', post_path(post), class: 'btn btn-outline-primary btn-sm' %>
+                <p class="mt-2"><%= link_to "#{post.post_comments.count} コメント", post_path(post) %></p>
+              </div>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+    <!-- Following Tab -->
+    <div class="tab-pane fade" id="following" role="tabpanel" aria-labelledby="following-tab">
+      <div class="row">
+        <% @user.followings.each do |followed_user| %>
+          <div class="col-md-4 mb-4">
+            <div class="card">
+              <%= image_tag followed_user.get_profile_image, class: 'card-img-top rounded-circle', alt: 'following user image', style: 'width: 100px; height: 100px; margin: 0 auto;' %>
+              <div class="card-body text-center">
+                <h5><%= link_to followed_user.name, user_path(followed_user), class: 'text-dark' %></h5>
+              </div>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+    <!-- ブックマークタブ -->
+  <div class="tab-pane fade" id="bookmarks" role="tabpanel" aria-labelledby="bookmarks-tab">
+    <div class="row mt-3">
+      <% @user.bookmarked_posts.each do |post| %> <!-- ユーザーがブックマークした投稿を表示 -->
+        <div class="col-md-4 mb-4">
+          <%= render 'posts/post', post: post %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+  </div>
+  <!--固定イラスト-->
+  <div class="featured-posts mt-5">
+    <h4>固定イラスト</h4>
+    <div class="row">
+      <% if @userselected_post.present? %>
+        <% @userselected_post.each do |user_post| %>
+          <div class="col-md-3 mb-4">
+            <%= image_tag user_post.get_image, class: 'img-fluid', alt: 'featured image' %>
+          </div>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+  <!-- Bookmark Section -->
+  <div class="bookmarks mt-5">
+    <h4>ブックマーク</h4>
+    <% if @post.present? %>
+      <div class="bookmarks_btns_<%= @post.id %>">
+        <%= render 'bookmarks/bookmark', post: @post %>
+      </div>
+    <% end %>
+  </div>
+</div>

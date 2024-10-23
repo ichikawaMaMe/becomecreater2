@@ -9,26 +9,29 @@ class User < ApplicationRecord
 
 
 # フォロー関連
-#フォローしたされた関係
-has_many :relationships, class_name: "Relationship", foreign_key: "follower_id", dependent: :destroy
-has_many :reverse_of_relationships, class_name: "Relationship", foreign_key: "followed_id", dependent: :destroy
-#一覧画面
-has_many :followings, through: :relationships, source: :followed
-has_many :followers, through: :reverse_of_relationships, source: :follower
+
+  has_many :relationships, class_name: "Relationship", foreign_key: "follower_id", dependent: :destroy
+  has_many :followings, through: :relationships, source: :followed
+
+  has_many :reverse_of_relationships, class_name: "Relationship", foreign_key: "followed_id", dependent: :destroy
+  has_many :followers, through: :reverse_of_relationships, source: :follower
 
   #DM関連のアソシエーション
-  has_many :user_dmroom, dependent: :destroy
+  has_many :user_dmrooms, dependent: :destroy
   has_many :dms, dependent: :destroy
+  has_many :dmrooms, through: :user_dmrooms
 
   #閲覧数関連のアソシエーション
   has_many :access
 
   #ブックマーク関連のアソシエーション
-  has_many :bookmarks
-  has_many :bookmark_post, through: :bookmarks, source: :post
+  has_many :bookmarks, dependent: :destroy
+  has_many :bookmarked_posts, through: :bookmarks, source: :post
 
   #コメント関連のアソシエーション
   has_many :post_comments, dependent: :destroy
+
+
 
   has_one_attached :profile_image
   has_one_attached :mypageheader_image
@@ -40,9 +43,9 @@ has_many :followers, through: :reverse_of_relationships, source: :follower
   def unfollow(user_id)
     relationships.find_by(followed_id: user_id).destroy
   end
-  #def following?(user)
-    #followings.include?(user)
- # end
+  def following?(other_user)
+    followings.include?(other_user)
+  end
 
   def get_profile_image(width, height)
     unless profile_image.attached?

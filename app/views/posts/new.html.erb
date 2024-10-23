@@ -1,25 +1,51 @@
-<%= form_with model: @post do |f| %>
-
-イラスト投稿領域
-<%= f.file_field :image, accept: "image/png, image/jpeg" %>
-<br>
-作品タイトル
-<%= f.text_field :title %>
-<br>
-キャプション
-<%= f.text_area :caption %>
-<br>
-公式タグ選択
-<br>
-オリジナルタグ
-<%= f.text_area :tag_ids,class: "form-control", id:'tag_ids', placehodler: "タグをつける。複数つける場合は','で区切ってください。" %>
-<br>
-予約投稿チェックボックス
-<br>
-公開範囲選択
-<br>
-仮保存
-<br>
-投稿
-<%= f.submit '投稿' %>
-<% end %>
+<div class="container mt-5">
+  <h2 class="text-center mb-4">新規投稿</h2>
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <%= form_with(model: @post, local: true, html: { multipart: true }) do |f| %>
+        <div class="card shadow-sm">
+          <div class="card-body">
+            <!--タイトル-->
+            <div class="form-group">
+              <%= f.label :title, "タイトル", class: "form-label" %>
+              <%= f.text_field :title, class: "form-control", placeholder: "作品のタイトルを入力" %>
+            </div>
+            <!--画像-->
+            <div class="form-group">
+              <%= f.label :image, "画像アップロード", class: "form-label" %>
+              <%= f.file_field :image, class: "form-control-file" %>
+              <small class="form-text text-muted">※ 対応フォーマット: JPG, PNG</small>
+            </div>
+            <!--説明-->
+            <div class="form-group">
+              <%= f.label :caption, "説明", class: "form-label" %>
+              <%= f.text_area :caption, class: "form-control", placeholder: "作品の説明を入力", rows: 5 %>
+            </div>
+            <!--既存タグ-->
+            <div class="form-group">
+              <%= f.label :tags, '既存のタグから選択' %>
+              <%= f.select :existing_tags, options_for_select(@tags.pluck(:name)), {}, class: 'form-select', multiple: true %>
+            </div>
+            <!--新規タグ-->
+            <div class="form-group">
+              <%= f.label :new_tags, '新しいタグを追加 (カンマ区切り)' %>
+              <%= f.text_field :new_tags, class: 'form-control', placeholder: '例: new_tag1, new_tag2' %>
+            </div>
+            <!--公開-->
+            <div class="form-group">
+              <%= f.label :visibility, "公開設定", class: "form-label" %>
+              <%= f.select :visibility, options_for_select([["公開", "public"], ["非公開", "private"], ["フォロワー限定", "followers_only"]]), class: "form-control" %>
+            </div>
+            <!--投稿-->
+            <div class="form-group text-center">
+              <%= f.submit "投稿する", class: "btn btn-primary btn-lg mt-3" %>
+            </div>
+          </div>
+        </div>
+      <% end %>
+      <br>
+      <br>
+      <br>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,15 @@
+<div class="comments-list">
+  <% post.post_comments.each do |comment| %>
+    <div class="comment">
+      <p><strong><%= comment.user.name %></strong> <small><%= comment.created_at.strftime('%Y/%m/%d %H:%M') %></small></p>
+      <p><%= comment.comment %></p>
+
+      <% if comment.user == current_user %>
+        <div class="comment-actions">
+          <%= link_to '削除', post_post_comment_path(post, comment), method: :delete, data: { confirm: '削除しますか？' }, class: "btn btn-sm btn-danger" %>
+        </div>
+      <% end %>
+    </div>
+    <hr>
+  <% end %>
+</div>

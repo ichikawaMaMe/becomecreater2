@@ -1,36 +1,135 @@
-index(HOME)
-<br>
 
 <div class="container">
   <div class="row">
-    <div class="border col-3">
-      イラスト創作相談
-      <%= link_to "イラスト創作相談", '/' %>
+    <div class="border col-3 border-right">
+      <h4 class="text-center mb-3">
+        <% link_to "イラスト創作相談", '/', class: "btn btn-primary" %>
+      </h4>
       <br>
-      ランキング
-      <%= link_to "ランキング", '/posts' %>
-      <br>
-      フォロー新着
-      <br>
-      フォロワー新着
-      <br>
-      全体新着
-      <br>
-      閲覧履歴
+      <h4 class="text-center mb-3"></h4>
+      <h4 class="text-center">フォロー新着</h4>
+      <h4 class="text-center">フォロワー新着</h4>
+      <h4 class="text-center">全体新着</h4>
+      <h4 class="text-center">閲覧履歴</h4>
     </div>
-    <div class="border col-9">
-      お知らせ
-      フォロー新着
-      ランキング
-      <=% @month_bookmark_rankspost_ranks.each.with_index(1) do |post, i| %>
-      第<%= 1%>位
-      <=% end %>
-      <% if @post.present? %>
-      <% @post.each do |post| %>
-       <%= post.title %>
-       <%= post.image %>
-       <br>
-      <% end %>
+
+    <div class="col-md-9">
+      <h4 class="border-bottom pb-2">お知らせ</h4>
+      <ul class="nav nav-tabs" id="rankingTab" role="tablist">
+        <li class="nav-item">
+          <a class="nav-link active" id="month-tab" data-toggle="tab" href="#month" role="tab" aria-controls="month" aria-selected="true">月間ランキング</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" id="week-tab" data-toggle="tab" href="#week" role="tab" aria-controls="week" aria-selected="false">週間ランキング</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" id="comments-tab" data-toggle="tab" href="#comments" role="tab" aria-controls="comments" aria-selected="false">コメント数ランキング</a>
+        </li>
+      </ul>
+
+      <!-- タブの内容 -->
+      <div class="tab-content" id="rankingTabContent">
+        <!-- 月間ランキング -->
+        <div class="tab-pane fade show active" id="month" role="tabpanel" aria-labelledby="month-tab">
+          <h5 class="mt-3">月間ブックマークランキング</h5>
+          <% if @month_bookmark_ranks.present? %>
+            <div class="row mb-4">
+              <% @month_bookmark_ranks.each_with_index do |post, i| %>
+                <div class="col-md-4">
+                  <div class="card">
+                    <%= link_to post_path(post) do %>
+                      <%= image_tag post.image.variant(resize: "300x300").processed, class: "card-img-top img-fluid" if post.image.attached? %>
+                    <% end %>
+                    <div class="card-body text-center">
+                      <p class="card-text">第<%= i + 1 %>位: <%= post.title %></p>
+                      <p>ブックマーク数: <%= post.bookmarks.count %></p>
+                    </div>
+                  </div>
+                </div>
+              <% end %>
+            </div>
+          <% else %>
+            <p>ランキングデータがありません。</p>
+          <% end %>
+        </div>
+
+        <!-- 週間ランキング -->
+        <div class="tab-pane fade" id="week" role="tabpanel" aria-labelledby="week-tab">
+          <h5 class="mt-3">週間ブックマークランキング</h5>
+          <% if @week_bookmark_ranks.present? %>
+            <div class="row mb-4">
+              <% @week_bookmark_ranks.each_with_index do |post, i| %>
+                <div class="col-md-4">
+                  <div class="card">
+                    <%= link_to post_path(post) do %>
+                      <%= image_tag post.image.variant(resize: "300x300").processed, class: "card-img-top img-fluid" if post.image.attached? %>
+                    <% end %>
+                    <div class="card-body text-center">
+                      <p class="card-text">第<%= i + 1 %>位: <%= post.title %></p>
+                      <p>ブックマーク数: <%= post.bookmarks.count %></p>
+                    </div>
+                  </div>
+                </div>
+              <% end %>
+            </div>
+          <% else %>
+            <p>ランキングデータがありません。</p>
+          <% end %>
+        </div>
+
+        <!-- コメント数ランキング -->
+        <div class="tab-pane fade" id="comments" role="tabpanel" aria-labelledby="comments-tab">
+          <h5 class="mt-3">コメント数ランキング</h5>
+          <% if @post_comment_ranks.present? %>
+            <div class="row mb-4">
+              <% @post_comment_ranks.each_with_index do |post, i| %>
+                <div class="col-md-4">
+                  <div class="card">
+                    <%= link_to post_path(post) do %>
+                      <%= image_tag post.image.variant(resize: "300x300").processed, class: "card-img-top img-fluid" if post.image.attached? %>
+                    <% end %>
+                    <div class="card-body text-center">
+                      <p class="card-text">第<%= i + 1 %>位: <%= post.title %></p>
+                      <p>コメント数: <%= post.post_comments.count %></p>
+                    </div>
+                  </div>
+                </div>
+              <% end %>
+            </div>
+          <% else %>
+            <p>ランキングデータがありません。</p>
+          <% end %>
+        </div>
+      </div>
+
+      <h5>フォロー新着</h5>
+      <% if @posts.present? %>
+        <div class="row">
+          <% @posts.each_with_index do |post, index| %>
+            <% if index % 3 == 0 && index > 0 %>
+              </div><div class="row">
+            <% end %>
+
+            <div class="col-md-4 mb-4">
+              <div class="card">
+                <%= link_to post_path(post) do %>
+                <%= image_tag post.image.variant(resize: "300x300").processed, class: "card-img-top img-fluid" if post.image.attached? %>
+                <% end %>
+                <div class="card-body text-center">
+                  <h6 class="card-title"><%= post.title %></h6>
+                  <p class="card-text">コメント: <%= post.post_comments.count %></p>
+                  <div class="d-flex justify-content-center">
+                    <%= render "bookmarks/btn", post: post, remote: true do %>
+                      <i class="fas fa-heart"></i> <%= post.bookmarks.count %>
+                    <% end %>
+                  </div>
+                </div>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      <% else %>
+        <p>新着投稿はありません。</p>
       <% end %>
     </div>
   </div>

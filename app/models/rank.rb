@@ -1,10 +1,8 @@
-class RanksController < ApplicationController
+class Rank < ApplicationRecord
+    belongs_to :user
+    belongs_to :post
 
- def index
-  ranking
- end
 
-  #投稿がない場合の例外処理を入れること
   module Rank
    def ranking
     #ブックマークラング（月）

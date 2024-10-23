@@ -1,0 +1,10 @@
+<div class="post">
+  <%= image_tag post.get_post_image, class: 'post-img-top', alt: 'post image' %>
+  <div class="post-body">
+    <h5 class="post-title"><%= post.title %></h5>
+    <div id="bookmark_btn_<%= post.id %>">
+      <%= render 'bookmarks/btn', post: post %>
+    </div>
+    <%= link_to 'VIEW POST', post_path(post), class: 'btn btn-outline-primary btn-sm mt-2' %>
+  </div>
+</div>

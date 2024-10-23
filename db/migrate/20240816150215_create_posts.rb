@@ -8,8 +8,9 @@ class CreatePosts < ActiveRecord::Migration[6.1]
       t.datetime :post_time
       t.boolean :publication_range
       t.boolean :status
+      t.string :visibility
+      t.text :description
       t.timestamps
     end
-#    add_index :tag_tables, [:post_id, :tag_id], unique: true
   end
 end

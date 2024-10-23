@@ -1,0 +1,52 @@
+<div class="container">
+  <div class="row">
+    <!-- 左側: DMしているユーザーリスト -->
+    <div class="col-2">
+      <div class="list-group">
+        <% if @dm_users.present? %>
+          <% @dm_users.each do |user| %>
+            <a href="#" class="list-group-item list-group-item-action" data-user-id="<%= user.id %>" id="user-<%= user.id %>">
+              <img src="<%= user.get_profile_image(100,100) %>" class="rounded-circle" width="40" height="40">
+              <strong><%= user.name %></strong>
+              <% if user.dms.any? %>
+                <p class="mb-0"><small><%= user.dms.last.conversation %></small></p>
+                <small><%= user.dms.last.send_time.strftime('%Y-%m-%d %H:%M') %></small>
+              <% else %>
+                <p class="mb-0"><small>メッセージはありません</small></p>
+              <% end %>
+              <button class="btn btn-danger btn-sm remove-dm" data-user-id="<%= user.id %>">×</button>
+            </a>
+          <% end %>
+        <% else %>
+          <div class="list-group-item">DMしているユーザーがいません</div>
+        <% end %>
+      </div>
+    </div>
+
+    <!-- 中央: DM画面 -->
+    <div class="col-8">
+      <div class="dm-chat-box" style="height: 500px; overflow-y: scroll;" id="dm-chat-box">
+        <% if @dms.present? %>
+          <%= render @dms %> <!-- DMの内容をここに表示 -->
+        <% else %>
+          <p>メッセージはありません</p>
+        <% end %>
+      </div>
+
+      <%= form_with(model: @dm, remote: true, id: "dm-form") do |f| %>
+        <div class="input-group mt-3">
+          <%= f.text_area :conversation, placeholder: "メッセージを入力", class: "form-control" %>
+          <%= f.hidden_field :dmroom_id, value: @dmroom&.id %>
+          <%= f.submit "送信", class: "btn btn-primary" %>
+        </div>
+      <% end %>
+    </div>
+
+    <div class="col-2">
+      <button id="remove-all-fixed" class="btn btn-secondary">全ての固定を解除</button>
+      <div id="dm-chat-box-fixed" class="dm-chat-box" style="height: 500px; overflow-y: scroll;">
+        <%= render @dms %> <!-- DM内容 -->
+      </div>
+    </div>
+  </div>
+</div>

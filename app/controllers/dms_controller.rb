@@ -1,37 +1,59 @@
 class DmsController < ApplicationController
-    before_action :reject_non_related, only: [:show]
+  def show
+    @user = User.find(params[:id])
+    rooms = current_user.user_dmrooms.pluck(:dmroom_id) # 自身が参加している部屋IDを取得
+    user_dmroom = UserDmroom.find_by(user_id: @user.id, dmroom_id: rooms) # 他ユーザーが参加しているDMルームを検索
 
-    def create
-       @dms = current_user.dms.new(dm_params)
-       render :validater unless @dm.save
+    if user_dmroom
+      @room = user_dmroom.dmroom
+    else
+      @room = Dmroom.create # 新しいDMルームを作成
+      UserDmroom.create(user_id: current_user.id, dmroom_id: @room.id)
+      UserDmroom.create(user_id: @user.id, dmroom_id: @room.id)
     end
 
-    def show
-        @user = User.find(params[:id])
-        rooms = current_user.user_dmrooms.pluck(:room_id)
-        user_dmrooms = UserDmroom.find_by(user_id: @user.id, dmroom_id: rooms)
-         unless user_dmrooms.nil?
-          @room = user_dmrooms.room
-         else
-          @room = Room.new
-          @room.save
-          UserDmroom.create(user_id: current_user.id, room_id: @room.id)
-          UserDmroom.create(user_id: @user.id, room_id: @room.id)
-         end
-        @dms = room.dms
-        @dm = Dm.new(room_id: @room.id)
+    @dms = @room.dms
+    @dm = Dm.new(dmroom_id: @room.id)
+
+    if params[:content].present?
+      @search_results = User.search_for(params[:content], params[:method])
     end
 
-    private
+  end
+    def index
+    # フォローしているユーザーのIDを取得
+    following_user_ids = current_user.following_ids
+    # DMルームを取得
+    dmroom_user_ids = Dmroom.where(user_id: following_user_ids).pluck(:user_id)
 
-    def dm_params
-        params.require(:dm).permit(:dm, :dmroom_id)
-    end
-    def reject_non_related
-        user = User.find(params[:id])
-        unless current_user.following?(user) && user.following?(current_user)
-          redirect_to posts_path
-        end
+    # フォローしているユーザーまたはDMルームに参加しているユーザーを取得
+    @dm_users = User.where(id: following_user_ids).or(User.where(id: dmroom_user_ids))
+
+    # DMメッセージを取得
+    @dmroom = Dmroom.find_by(user_id: current_user.id)
+    @dms = Dm.where(dmroom_id: @dmroom&.id).order(created_at: :asc) # DMルームIDを使用してメッセージを取得
+    @dm = Dm.new
     end
 
+  def create
+    @dm = Dm.new(dm_params)
+    if @dm.save
+      respond_to do |format|
+        format.js
+      end
+    else
+      render :new
+    end
+  end
+  def remove_dm
+  @user = User.find(params[:id])
+  respond_to do |format|
+    format.js
+  end
+  end
+  private
+
+  def dm_params
+    params.require(:dm).permit(:conversation, :dmroom_id).merge(user_id: current_user.id)
+  end
 end

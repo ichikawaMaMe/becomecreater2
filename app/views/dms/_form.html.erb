@@ -1,0 +1,9 @@
+<%= form_with(model: @dm, local: false) do |f| %>
+  <div class="form-group">
+    <%= f.text_area :dm, placeholder: "メッセージを入力してください", class: "form-control" %>
+  </div>
+  <div class="form-group">
+    <%= f.hidden_field :dmroom_id, value: @dm.dmroom_id %>
+    <%= f.submit "送信", class: "btn btn-primary" %>
+  </div>
+<% end %>

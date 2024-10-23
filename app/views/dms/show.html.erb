@@ -1,25 +1,38 @@
-<h1 id="room"><%= @user.name %> </h1>
-<div class="message" style="width: 400px;">
-  <% @dms.each do |dm| %>
-  <% if dm.user_id == current_user.id %>
-   <p style="text-align: right;"><%= dm.message %></p>
-  <% else %>
-   <p style="text-align: left;"><%= dm.message %></p>
-  <% end %>
-<% end %>
+<div class="container">
+  <div class="row">
+    <div class="col-6">
+      <!-- DM一覧表示 -->
+      <div id="message-list">
+        <%= render @dms %> <!-- DMのリストを表示 -->
+      </div>
+
+      <%= form_with(model: @dm, local: false) do |f| %>
+        <%= f.text_area :dm, placeholder: "メッセージを入力", class: "form-control" %>
+        <%= f.hidden_field :dmroom_id, value: @room.id %>
+        <%= f.submit "送信", class: "btn btn-primary mt-2" %>
+      <% end %>
+    </div>
+
+    <div class="col-6">
+      <!-- ユーザー検索フォーム -->
+      <%= form_with url: search_path, method: :get, local: true, class: 'd-flex' do |f| %>
+        <div class="input-group">
+          <%= f.text_field :content, class: 'form-control', placeholder: 'ユーザー検索' %>
+          <%= f.select :method, options_for_select({ '完全一致' => 'perfect', '部分一致' => 'partial' }), {}, class: 'form-select' %>
+          <%= f.submit '検索', class: 'btn btn-primary' %>
+        </div>
+      <% end %>
+
+      <!-- 検索結果表示 -->
+      <% if @search_results.present? %>
+        <div class="search-results">
+          <% @search_results.each do |user| %>
+            <div class="user">
+              <%= link_to user.username, dm_path(user.id) %> <!-- ユーザー名をクリックしてDMを開始 -->
+            </div>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+  </div>
 </div>
-
-<div class="errors">
-  <%= render "layouts/errors", obj: @dm %>
-</div>
-
-<%= form_with model: @dm, data: {remote: true} do |f| %>
- <%= f.text_field :message %>
- <%= f.hidden_field :dmroom_id %>
-<% end %>
-
-
-    #DMリンクこのuserは相手userのこと
-    <% if current_user != user && current_user.following?(user) && user.following?(current_user) %>
-     <%= link_to 'DM', dm_path(user.id), class: "ml-3" %>
-    <% end %>

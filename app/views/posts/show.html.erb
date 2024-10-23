@@ -1,48 +1,55 @@
 
-<%= post_image_tag @post, :image, fill, 200, 200 %>
-<%= @post.title %>
-<%= @post.user.name %>
-<%= @post.created_at.strftime('%Y/%m/%d') %>
-<% if @post.user == current_user %>
-<%= link_to "削除", post_path(@post), method: :delete %>
-<% end %>
+<div class="container">
+  <div class="row">
+    <h3>ユーザー情報</h3>
+    <%= link_to @post.user do %>
+    <%= image_tag @post.user.get_profile_image(100, 100), class: "img-thumbnail rounded-circle" %>
+    <h5 class="mt-2"><%= @post.user.name %></h5>
+    <% end %>
+  </div>
+
+  <div class="col-md-8 offset-md-1">
+    <div class="post mb-4">
+      <div class="post-body">
+        <h3><%= @post.title %></h3>
+        <div class="text-center my-3">
+          <%= image_tag @post.image, class: "img-fluid", alt: "投稿画像" %>
+        </div>
+        <div class="mb-3">
+          <h5>タグ</h5>
+          <% @post.tags.each do|tag| %>
+          <span class="badge badge-pill badge-primary"><%= tag.name %></span>
+          <% end %>
+        </div>
+        <p>閲覧数: <%= @post.access.count %></p>
+        <div id="comment_counter">
+          <%= render "post_comment/counter", post: @post %>
+        </div>
+
+        <div class="text-right">
+        <td><%= render "bookmarks/btn", post: @post, remote: true do %>
+         <i class="fas fa-heart"></i><%= post.bookmarks.count %>
+         <% end %>
+        </td>
+        </div>
+
+        <div class="my-4">
+          <h5>コメントを投稿する</h5>
+          <%= form_with model: [@post, @post_comment], remote: true do |f| %>
+            <div>
+              <%= f.text_area :comment, rows: 4, class: "w-100", placeholder: "コメントを入力" %>
+            </div>
+            <%= f.submit "送信", class: "btn btn-primary" %>
+          <% end %>
+        </div>
+
+        <div id="comment_index" class="my-3">
+          <%= render "post_comment/index", post: @post %>
+        </div>
 
 
-
-ブックマークのonoff用の記述
-
-<td id="bookmark_btn_<%= post.id %>">
-  <%= render "posts/bookmark", post: post %>
-</td>
-
-コメント表示用の記述
-コメント件数:<%= @post.post_comment.count %>
-<% @post_image.post_comments.each do |post_comment| %>
-コメントユーザーのアイコン<%= image_tag post_comment.user.get_profile_image(100,100) %>
-コメントユーザー名<%= post_comment.user.name %>
-<%= post_comment.created_at.strftime('%Y/%m/%d') %><%= post_comment.comment %>
-
-<% end %>
-<% end %>
-
-タグ表示
-<%= post.tags.each do |tag| %>
-<%= tag.name %>
-<% end %>
-
-閲覧数用の記述
-<td>閲覧数:<%= @post.access.count %></td>
-
-投稿削除
-<td><%= link_to 'Destroy', post_path, method: :delete, deta: { confirm: '削除しますか' }, class* "btn btn-sm btn-danger"%></td>
-
-コメント削除
-<% if post_comment.user == current_user %>
-<%= link_to "削除", post_post_comment_path(post_comment.post, post_comment), method: :delete %>
-<% end %>
-
-コメント投稿用の記述
-<%= form_with model: [@post_image, @post_comment] do |f| %>
-<%= f.text_area :comment, rows:'4', placeholder: "コメント" %>
-<%= f.submit "送信" %>
-<% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

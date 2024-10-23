@@ -1,0 +1,51 @@
+<div class="container mt-5">
+  <h2>プロフィール編集</h2>
+
+  <%= form_with model: @user, url: user_path(@user), method: :patch, local: true, class: 'mt-4' do |f| %>
+    <!-- プロフィール画像 -->
+    <div class="form-group">
+      <%= f.label :profile_image, 'プロフィール画像' %>
+      <%= f.file_field :profile_image, class: "form-control #{'is-invalid' if @user.errors[:profile_image].present?}" %>
+      <% if @user.errors[:profile_image].present? %>
+        <div class="invalid-feedback">
+          <%= @user.errors[:profile_image].join(', ') %>
+        </div>
+      <% end %>
+    </div>
+
+    <!--ヘッダー-->
+    <div class="form-group">
+      <%= f.label :mypageheader_image, 'カバー画像' %>
+      <%= f.file_field :mypageheader_image, class: "form-control #{'is-invalid' if @user.errors[:mypageheader_image].present?}" %>
+      <% if @user.errors[:mypageheader_image].present? %>
+        <div class="invalid-feedback">
+          <%= @user.errors[:mypageheader_image].join(', ') %>
+        </div>
+      <% end %>
+    </div>
+
+    <!--ユーザー名-->
+    <div class="form-group">
+      <%= f.label :name, 'ユーザー名' %>
+      <%= f.text_field :name, class: "form-control #{'is-invalid' if @user.errors[:name].present?}" %>
+      <% if @user.errors[:name].present? %>
+        <div class="invalid-feedback">
+          <%= @user.errors[:name].join(', ') %>
+        </div>
+      <% end %>
+    </div>
+
+    <!--自己紹介-->
+    <div class="form-group">
+      <%= f.label :introduction, '自己紹介' %>
+      <%= f.text_area :introduction, class: "form-control #{'is-invalid' if @user.errors[:introduction].present?}" %>
+      <% if @user.errors[:introduction].present? %>
+        <div class="invalid-feedback">
+          <%= @user.errors[:introduction].join(', ') %>
+        </div>
+      <% end %>
+    </div>
+
+    <%= f.submit '更新する', class: 'btn btn-primary' %>
+  <% end %>
+</div>

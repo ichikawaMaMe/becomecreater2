@@ -1,5 +1,6 @@
 class ApplicationController < ActionController::Base
   before_action :configure_permitted_parameters, if: :devise_controller?
+  before_action :set_user_images
 
   def after_sign_in_path_for(resource)
     posts_path   #homeに移動するけど、後ほどルート確認して正しい記述に直しておく
@@ -44,6 +45,17 @@ class ApplicationController < ActionController::Base
     @bookmark_posts = @user.bookmark_post
   end
 
+module ApplicationHelper
+  def profile_image_for(user)
+    if user&.profile_image&.attached?
+      user.profile_image.url
+    else
+      asset_path('sample-author1.jpg')
+    end
+  end
+end
+
+
   protected
 
   def configure_permitted_parameters
@@ -59,6 +71,17 @@ class ApplicationController < ActionController::Base
           redirect_to posts_path
         end
     end
+
+ def set_user_images
+  if current_user
+    @profile_image_url = current_user.profile_image.attached? ? url_for(current_user.profile_image) : asset_path('sample-author1.jpg')
+    @mypageheader_image_url = current_user.mypageheader_image.attached? ? url_for(current_user.mypageheader_image) : asset_path('sample-author1.jpg')
+  else
+    @profile_image_url = asset_path('sample-author1.jpg')
+    @mypageheader_image_url = asset_path('sample-author1.jpg')
+  end
+ end
+
 
 end
 

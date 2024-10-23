@@ -1,2 +1,28 @@
-$('.message').append("<p style='text-align: right;'><%= @dmmessage %></p>);
-$('input[type=text]').val("")
+document.addEventListener("DOMContentLoaded", () => {
+  const commentForm = document.getElementById("dm-form");
+
+  if (commentForm) {
+    commentForm.addEventListener("ajax:success", (event) => {
+      const [data, status, xhr] = event.detail;
+
+      // DM内容を再レンダリング
+      const dmChatBox = document.getElementById("dm-chat-box");
+      dmChatBox.innerHTML += `
+        <div>
+          <strong>${data.user.name}</strong>: ${data.conversation}
+        </div>
+      `;
+
+      // フォームをリセット
+      commentForm.reset();
+    });
+
+    commentForm.addEventListener("ajax:error", (event) => {
+      const [data, status, xhr] = event.detail;
+
+      // エラーを表示
+      console.error("エラーが発生しました:", data);
+      alert("メッセージの送信に失敗しました。");
+    });
+  }
+});
