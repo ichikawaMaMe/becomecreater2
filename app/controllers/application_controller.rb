@@ -29,10 +29,6 @@ class ApplicationController < ActionController::Base
        end
     end
   end
-      #@posts = @user.posts.order(created_at: :desc).page(params[:page]).per(2)
-      #@like_posts = @user.likes.order(created_at: :desc).page(params[:page]).per(2)
-      #@repost_posts = @user.reposts.order(created_at: :desc).page(params[:page]).per(2)
-      #@comment_posts = @user.comments.oder(created_at: :desc).page(params[:page]).per(2)
 
   #ブックマーク関連
   def index
@@ -50,7 +46,7 @@ module ApplicationHelper
     if user&.profile_image&.attached?
       user.profile_image.url
     else
-      asset_path('sample-author1.jpg')
+      "/assets/images/sample-author1.jpeg"
     end
   end
 end
@@ -74,11 +70,11 @@ end
 
  def set_user_images
   if current_user
-    @profile_image_url = current_user.profile_image.attached? ? url_for(current_user.profile_image) : asset_path('sample-author1.jpg')
-    @mypageheader_image_url = current_user.mypageheader_image.attached? ? url_for(current_user.mypageheader_image) : asset_path('sample-author1.jpg')
+    @profile_image_url = current_user.profile_image.attached? ? url_for(current_user.profile_image) : "/assets/images/sample-author1.jpeg"
+    @mypageheader_image_url = current_user.mypageheader_image.attached? ? url_for(current_user.mypageheader_image) : "/assets/images/sample-author1.jpeg"
   else
-    @profile_image_url = asset_path('sample-author1.jpg')
-    @mypageheader_image_url = asset_path('sample-author1.jpg')
+    @profile_image_url = "/assets/images/sample-author1.jpeg"
+    @mypageheader_image_url = "/assets/images/sample-author1.jpeg"
   end
  end
 
