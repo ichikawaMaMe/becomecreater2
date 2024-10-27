@@ -3,11 +3,10 @@
   <div class="row">
     <h3>ユーザー情報</h3>
     <%= link_to @post.user do %>
-    <%= image_tag @post.user.get_profile_image(100, 100), class: "img-thumbnail rounded-circle" %>
-    <h5 class="mt-2"><%= @post.user.name %></h5>
+      <%= image_tag @post.user.get_profile_image(100, 100), class: "img-thumbnail rounded-circle" %>
+      <h5 class="mt-2"><%= @post.user.name %></h5>
     <% end %>
   </div>
-
   <div class="col-md-8 offset-md-1">
     <div class="post mb-4">
       <div class="post-body">
@@ -17,22 +16,26 @@
         </div>
         <div class="mb-3">
           <h5>タグ</h5>
-          <% @post.tags.each do|tag| %>
-          <span class="badge badge-pill badge-primary"><%= tag.name %></span>
+          <% @post.tags.each do |tag| %>
+            <span class="badge badge-pill badge-primary"><%= tag.name %></span>
           <% end %>
         </div>
         <p>閲覧数: <%= @post.access.count %></p>
         <div id="comment_counter">
           <%= render "post_comment/counter", post: @post %>
         </div>
-
         <div class="text-right">
-        <td><%= render "bookmarks/btn", post: @post, remote: true do %>
-         <i class="fas fa-heart"></i><%= post.bookmarks.count %>
-         <% end %>
-        </td>
+          <td><%= render "bookmarks/btn", post: @post, remote: true do %>
+            <i class="fas fa-heart"></i><%= post.bookmarks.count %>
+          <% end %>
+          </td>
         </div>
-
+        <% if @post.user == current_user %>
+          <div class="my-3 text-right">
+            <%= link_to "編集", edit_post_path(@post), class: "btn btn-secondary" %>
+            <%= link_to "削除", post_path(@post), method: :delete, data: { confirm: "本当に削除しますか？" }, class: "btn btn-danger" %>
+          </div>
+        <% end %>
         <div class="my-4">
           <h5>コメントを投稿する</h5>
           <%= form_with model: [@post, @post_comment], remote: true do |f| %>
@@ -42,12 +45,8 @@
             <%= f.submit "送信", class: "btn btn-primary" %>
           <% end %>
         </div>
-
         <div id="comment_index" class="my-3">
           <%= render "post_comment/index", post: @post %>
-        </div>
-
-
         </div>
       </div>
     </div>

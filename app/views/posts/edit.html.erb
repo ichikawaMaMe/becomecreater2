@@ -1,0 +1,23 @@
+<div class="container mt-4">
+  <h2>投稿の編集</h2>
+  <%= form_with model: @post, local: true do |f| %>
+    <div class="mb-3">
+      <%= f.label :title, "タイトル" %>
+      <%= f.text_field :title, class: "form-control" %>
+    </div>
+
+    <div class="mb-3">
+      <%= f.label :caption, "説明文" %>
+      <%= f.text_area :caption, rows: 4, class: "form-control" %>
+    </div>
+
+    <div class="mb-3">
+      <%= f.label :tags, "タグ" %>
+      <%= f.text_field :tags, class: "form-control", placeholder: "タグをカンマで区切って入力" %>
+    </div>
+
+    <div class="text-right">
+      <%= f.submit "更新", class: "btn btn-primary" %>
+    </div>
+  <% end %>
+</div>

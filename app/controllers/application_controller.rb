@@ -6,7 +6,7 @@ class ApplicationController < ActionController::Base
     posts_path   #homeに移動するけど、後ほどルート確認して正しい記述に直しておく
   end
   def after_sign_out_path_for(resource)
-    about_path
+    root_path
   end
 
   #DM関連

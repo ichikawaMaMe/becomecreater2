@@ -60,7 +60,7 @@ class Post < ApplicationRecord
         if method == 'perfect'
             Post.where(title: content)
         else
-            Post.where('name LIKE ?', '%' + contetnt + '%')
+            Post.where('title LIKE ?', '%' + contetnt + '%')
         end
     end
 

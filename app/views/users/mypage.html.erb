@@ -63,21 +63,24 @@
         <% end %>
       </div>
     </div>
-    <!-- Following Tab -->
     <div class="tab-pane fade" id="following" role="tabpanel" aria-labelledby="following-tab">
-      <div class="row">
-        <% @user.followings.each do |followed_user| %>
-          <div class="col-md-4 mb-4">
-            <div class="card">
-              <%= image_tag followed_user.get_profile_image, class: 'card-img-top rounded-circle', alt: 'following user image', style: 'width: 100px; height: 100px; margin: 0 auto;' %>
-              <div class="card-body text-center">
-                <h5><%= link_to followed_user.name, user_path(followed_user), class: 'text-dark' %></h5>
-              </div>
+   <!-- Following Tab -->
+    <div class="tab-pane fade" id="following" role="tabpanel" aria-labelledby="following-tab">
+     <div class="row">
+      <% @user.followings.each do |followed_user| %>
+      <% followed_user.posts.order(created_at: :desc).limit(5).each do |post| %>
+        <div class="col-md-2 mb-4"> <!-- 5列のため、col-md-2を使用 -->
+          <div class="card border mb-2"> <!-- 境目をわかりやすくするためにborderクラスを追加 -->
+            <%= link_to image_tag(post.get_post_image(width: 300, height: 300), class: 'card-img-top', alt: 'post image', style: 'width: 100%; height: auto;'), post_path(post) %>
+            <div class="card-body text-center">
+              <%= link_to followed_user.name, user_path(followed_user), class: 'text-dark' %> <!-- ユーザー名のリンク -->
             </div>
           </div>
-        <% end %>
-      </div>
-    </div>
+        </div>
+      <% end %>
+    <% end %>
+  </div>
+</div>
     <!-- ブックマークタブ -->
   <div class="tab-pane fade" id="bookmarks" role="tabpanel" aria-labelledby="bookmarks-tab">
     <div class="row mt-3">
@@ -103,12 +106,12 @@
     </div>
   </div>
   <!-- Bookmark Section -->
-  <div class="bookmarks mt-5">
+  <!--div class="bookmarks mt-5">
     <h4>ブックマーク</h4>
-    <% if @post.present? %>
-      <div class="bookmarks_btns_<%= @post.id %>">
-        <%= render 'bookmarks/bookmark', post: @post %>
+    <#% if @post.present? %>
+      <div class="bookmarks_btns_<#%= @post.id %>">
+        <#%= render 'bookmarks/bookmark', post: @post %>
       </div>
-    <% end %>
-  </div>
+    <#% end %>
+  </div-->
 </div>

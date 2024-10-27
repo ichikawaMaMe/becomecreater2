@@ -1,6 +1,11 @@
 class PostsController < ApplicationController
   # include Rank
 
+  before_action :authenticate_user!
+  before_action :set_post, only: [:show, :edit, :update, :destroy]
+  before_action :authorize_user, only: [:edit, :update, :destroy]
+
+
   def show
     @post = Post.find(params[:id])
     @user = @post.user
@@ -98,6 +103,16 @@ class PostsController < ApplicationController
     post.tags << tag unless post.tags.include?(tag) # 投稿にタグを関連付ける（重複を避ける）
   end
   end
+
+  def set_post
+    @post = Post.find(params[:id])
+  end
+
+
+  def authorize_user
+    redirect_to root_path, alert: "権限がありません" unless @post.user == current_user
+  end
+
 
   def ranking
     @month_bookmark_ranks = Post.joins(:bookmarks)

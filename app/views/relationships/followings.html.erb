@@ -3,8 +3,12 @@
   <% @users.each do |user| %>
     <div class="list-group-item d-flex justify-content-between align-items-center">
       <div class="d-flex align-items-center">
-        <%= image_tag user.get_profile_image(40, 40), class: 'rounded-circle me-2' %>
-        <span><%= user.name %></span>
+        <!-- プロフィール画像にリンクを追加 -->
+        <%= link_to user_path(user) do %>
+          <%= image_tag user.get_profile_image(40, 40), class: 'rounded-circle me-2' %>
+        <% end %>
+        <!-- ユーザー名にリンクを追加 -->
+        <%= link_to user.name, user_path(user), class: 'text-dark' %>
       </div>
       <div id="follow-btn-<%= user.id %>">
         <%= render 'unfollow_btn', user: user %>
