@@ -4,6 +4,9 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
 
+         validates :password, length: { minimum: 6 }, allow_nil: true
+         validates :name, length: { minimum: 3 }, presence: true
+
   #投稿関連のアソシエーション
   has_many :posts, dependent: :destroy
 

@@ -1,5 +1,4 @@
 class UsersController < ApplicationController
-
     before_action :set_user, only: [:edit, :update]
 
   def show
@@ -31,7 +30,6 @@ class UsersController < ApplicationController
    def user_params
      params.require(:user).permit(:name, :profile_image, :introduction, :mypageheader_image, :email, :password, :password_confirmation)
    end
-
 
 
 end
