@@ -12,6 +12,17 @@
   <body>
     <div class="container mt-5">
       <h2 class="text-center">ログイン</h2>
+     <% if @user.errors.any? %>
+          <ul class="alert alert-danger text-left" role="alert">
+            <h6 class="alert-heading">
+              <%= @user.errors.count %>件のエラーが発生しました
+            </h6>
+            <% @user.errors.full_messages.each do |message| %>
+              <li><%= message %></li>
+            <% end %>
+          </ul>
+        <% end %>
+
       <%= form_with(model: resource, as: resource_name, url: session_path(resource_name), local: false, class: 'mt-4') do |f| %>
         <div class="mb-3">
           <%= f.label :email, class: 'form-label' %>

@@ -46,7 +46,7 @@ module ApplicationHelper
     if user&.profile_image&.attached?
       user.profile_image.url
     else
-      "/assets/images/sample-author1.jpeg"
+      "/assets/images/sample-author1.jpg"
     end
   end
 end
@@ -70,11 +70,11 @@ end
 
  def set_user_images
   if current_user
-    @profile_image_url = current_user.profile_image.attached? ? url_for(current_user.profile_image) : "/assets/images/sample-author1.jpeg"
-    @mypageheader_image_url = current_user.mypageheader_image.attached? ? url_for(current_user.mypageheader_image) : "/assets/images/sample-author1.jpeg"
+    @profile_image_url = current_user.profile_image.attached? ? url_for(current_user.profile_image) : "/assets/images/sample-author1.jpg"
+    @mypageheader_image_url = current_user.mypageheader_image.attached? ? url_for(current_user.mypageheader_image) : "/assets/images/sample-author1.jpg"
   else
-    @profile_image_url = "/assets/images/sample-author1.jpeg"
-    @mypageheader_image_url = "/assets/images/sample-author1.jpeg"
+    @profile_image_url = "/assets/images/sample-author1.jpg"
+    @mypageheader_image_url = "/assets/images/sample-author1.jpg"
   end
  end
 
